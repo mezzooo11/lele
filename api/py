@@ -17,7 +17,7 @@ HTML_PAGE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>See</title>
+    <title>Share Location</title>
     <script>
         function sendLocation() {
             if (navigator.geolocation) {
