@@ -1,0 +1,71 @@
+import os
+import json
+import requests
+from flask import Flask, render_template_string, request
+
+# Install necessary packages
+try:
+    import flask
+except ImportError:
+    os.system("pip install flask requests")
+    import flask
+
+app = Flask(__name__)
+DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"  # Replace with your actual Discord webhook URL
+
+HTML_PAGE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>See</title>
+    <script>
+        function sendLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    fetch('/send_location', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        })
+                    })
+                    .then(response => response.text())
+                    .then(data => alert(data))
+                    .catch(error => console.error('Error:', error));
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Share Your Location</h1>
+    <button onclick="sendLocation()">Send Location</button>
+</body>
+</html>
+"""
+
+@app.route('/')
+def index():
+    return render_template_string(HTML_PAGE)
+
+@app.route('/send_location', methods=['POST'])
+def send_location():
+    data = request.json
+    if not data or 'latitude' not in data or 'longitude' not in data:
+        return "Invalid data", 400
+
+    payload = {
+        "content": f"User shared location: Latitude: {data['latitude']}, Longitude: {data['longitude']}"
+    }
+    
+    response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+    if response.status_code == 204:
+        return "Location sent successfully!"
+    else:
+        return "Failed to send location", 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
